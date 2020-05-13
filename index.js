@@ -48,33 +48,8 @@ fs.readdir('./cmds', (err,files) => {
 })
 
 bot.on('message', message => {
-    if(message.channel.type === 'dm' && !message.author.bot){
-        console.log("this is a dm");
-
-        // let addDoc = db.collection('logs').add({
-        //     timeStamp: FieldValue.serverTimestamp(),
-        //     message: message.content,
-        //     author: message.author.username
-        // }).then((q) => {
-        //     message.author.send(q.id);
-        // });
-
-        let logsRef = db.collection('logs');
-        let lastMessage = logsRef
-        .orderBy('timeStamp', 'desc').limit(1)
-        .get()
-        .then(q =>{
-            q.forEach(l => {
-                console.log(l.id + ': ' + l.data());
-            });
-        })
-        .catch(err => {
-            console.log('Error getting documents', err);
-        });
-        // message.author.send(lastMessage.message)
-
-    }else{
         if(message.author.bot) return;
+        if(message.channel.type === 'dm') return;
         db.collection('guilds').doc(message.guild.id).get().then((q) => {
             if(q.exists){
                 prefix = q.data().prefix;
@@ -93,7 +68,6 @@ bot.on('message', message => {
                 }
             }
         })
-    }
 });
 
 bot.on('guildCreate', async gData => {
