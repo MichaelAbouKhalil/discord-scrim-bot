@@ -3,7 +3,7 @@ module.exports.run = (bot, message, args, db, FieldValue) => {
     const roles = ['RoleA', 'RoleB'];
     let canAccess = false;
 
-    if (message.member.roles.some(role => roles.includes(role.name)){
+    if (message.member.roles.some(role => roles.includes(role.name))){
         canAccess = true;
     }
 
