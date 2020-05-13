@@ -1,5 +1,17 @@
 module.exports.run = async (bot, message, args, db) => {
 
+    const roles = ['RoleA', 'RoleB'];
+    let canAccess = false;
+
+    if (message.member.roles.some(role => roles.includes(role.name)){
+        canAccess = true;
+    }
+
+    if(!canAccess){
+        message.reply("you can't use this command");
+        return;
+    }
+    
     db.collection('scrims')
     .orderBy('TimeStamp', 'desc').limit(1)
     .get()

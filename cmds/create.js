@@ -1,5 +1,17 @@
 module.exports.run = (bot, message, args, db, FieldValue) => {
 
+    const roles = ['RoleA', 'RoleB'];
+    let canAccess = false;
+
+    if (message.member.roles.some(role => roles.includes(role.name)){
+        canAccess = true;
+    }
+
+    if(!canAccess){
+        message.reply("you can't use this command");
+        return;
+    }
+
     if((args.length != 6)) {
         message.reply("missing arguments!");
         return;
