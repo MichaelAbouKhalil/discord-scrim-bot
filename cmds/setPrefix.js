@@ -1,5 +1,17 @@
 module.exports.run = async (bot, message, args, db) => {
+    
+    const roles = ['RoleA', 'RoleB'];
+    let canAccess = false;
 
+    if (message.member.roles.cache.some(r=>roles.includes(r.name))){
+        canAccess = true;
+    }
+
+    if(!canAccess){
+        message.reply("you can't use this command!");
+        return;
+    }
+    
     if(args.length === 0){
         message.channel.send("missing the prefix");
     }else if(args.length === 1){

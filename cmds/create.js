@@ -3,12 +3,12 @@ module.exports.run = (bot, message, args, db, FieldValue) => {
     const roles = ['RoleA', 'RoleB'];
     let canAccess = false;
 
-    if (message.member.roles.find(role => roles.includes(role.name))){
+    if (message.member.roles.cache.some(r=>roles.includes(r.name))){
         canAccess = true;
     }
 
     if(!canAccess){
-        message.reply("you can't use this command");
+        message.reply("you can't use this command!");
         return;
     }
 
