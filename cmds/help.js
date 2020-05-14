@@ -42,6 +42,15 @@ module.exports.run = async (bot, message, args, db) => {
                         name: prefix + 'focus',
                         value: 'Select a specific Scrim'
                     }, {
+                        name: prefix + 'updateDate',
+                        value: 'updates scrim date'
+                    }, {
+                        name: prefix + 'updateTime',
+                        value: 'updates scrim time'
+                    }, {
+                        name: prefix + 'updateRules',
+                        value: 'update scrim rules'
+                    }, {
                         name: prefix + 'help',
                         value: 'Display bot commands'
                     }

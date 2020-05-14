@@ -1,3 +1,4 @@
+
 module.exports.run = async (bot, message, args, db) => {
 
     // role check
@@ -17,21 +18,24 @@ module.exports.run = async (bot, message, args, db) => {
         return;
     }
 
+    // arguments check
+    if (args.length != 2) {
+        message.channel.send('incorrect number of arguments');
+        return;
+    }
+
+    let nTime = args[0] + ' ' + args[1];
     db.collection('scrims')
         .doc(focusedID)
-        .get()
-        .then(q => {
-            let scrim = q.data();
-
-            // update db
-            db.collection('scrims').doc(q.id).update({
-                'state': 'open'
-            }).then(() => {
-                message.channel.send('Scrim registration open! @everyone');
-            });
+        .update({
+            'TimeOfScrim': nTime
+        })
+        .then(() => {
+            message.channel.send('Time updated');
         });
+
 }
 
 module.exports.help = {
-    name: 'open'
+    name: 'updateTime'
 }

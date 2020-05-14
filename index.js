@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 require('dotenv/config');
+const moment = require('moment');
 // const moment = require('moment.js');
 
 // import settings
@@ -65,7 +66,7 @@ bot.on('message', message => {
         if (bot.commands.get(command.slice(prefix.length))) {
             let cmd = bot.commands.get(command.slice(prefix.length));
             if (cmd) {
-                cmd.run(bot, message, args, db, FieldValue, prefix);
+                cmd.run(bot, message, args, db, FieldValue, prefix, moment);
             }
         }
     })
