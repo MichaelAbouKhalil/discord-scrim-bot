@@ -11,7 +11,7 @@ module.exports.run = async (bot, message, args, db) => {
         message.reply("you can't use this command!");
         return;
     }
-    
+
     db.collection('scrims')
     .orderBy('TimeStamp', 'desc').limit(1)
     .get()
@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args, db) => {
                 pMsg += '<@' + p + '> '
             });
             if(pIds != 0){
-                pMsg += '\nGET READY!!';
+                pMsg += '\nGET READY TO SCRIM!';
                 message.channel.send(pMsg);
             }
 
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args, db) => {
                 sMsg += '<@' + s + '> '
             });
             if(sIds != 0){
-                sMsg += '\nSTAY ON STANDBY!!';
+                sMsg += '\nSUBS STAY ON STANDBY';
                 message.channel.send(sMsg);
             }
             

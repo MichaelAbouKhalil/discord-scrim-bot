@@ -35,12 +35,12 @@ module.exports.run = async (bot, message, args, db) => {
                 'Players': players,
                 'PlayersID': playersIDs
             }).then(() =>{
-                message.reply('you are out!');
+                message.reply("you're no longer involved in the scrim");
             });
         })
     });
 }
 
 module.exports.help = {
-    name: 'out'
+    name: 'remove'
 }

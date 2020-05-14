@@ -52,7 +52,7 @@ module.exports.run = async (bot, message, args, db) => {
                 'Subs': subs,
                 'SubsID': subsIds
             }).then(() =>{
-                message.channel.send('<@'+userID + '> applied for subs!');
+                message.reply("you're down as a sub");
             });
         });
     });

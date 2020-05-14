@@ -20,13 +20,13 @@ module.exports.run = async (bot, message, args, db) => {
                     name: 'close',
                     value: 'Close scrim registrations'
                 },{
-                    name: 'play',
+                    name: 'in',
                     value: 'Apply to play in the main scrim roster'
                 },{
                     name: 'sub',
                     value: 'Apply to the sub roster'
                 },{
-                    name: 'out',
+                    name: 'remove',
                     value: 'Remove your name from rosters'
                 },{
                     name: 'notify',

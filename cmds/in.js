@@ -52,7 +52,7 @@ module.exports.run = async (bot, message, args, db) => {
                 'Players': players,
                 'PlayersID': ids
             }).then(() =>{
-                message.channel.send('<@'+userID + '> applied for main!');
+                message.reply("you've been put down to play scrim");
             });
         });
     });
@@ -60,5 +60,5 @@ module.exports.run = async (bot, message, args, db) => {
 }
 
 module.exports.help = {
-    name: 'play'
+    name: 'in'
 }

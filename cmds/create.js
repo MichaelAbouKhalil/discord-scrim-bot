@@ -17,6 +17,14 @@ module.exports.run = (bot, message, args, db, FieldValue) => {
         return;
     }
 
+    let prefix = '!';
+    db.collection('guilds').doc(message.guild.id).get()
+    .then((q) => {
+        if(q.exists){
+            prefix = q.data().prefix;
+        }
+    })
+
     let date = args[0];
     let time = args[1] + ' ' + args[2];
     let numbPlayers = args[3];
@@ -61,12 +69,12 @@ module.exports.run = (bot, message, args, db, FieldValue) => {
                 inline: true
             }
         ],
-        footer: {
-            text: 'to apply please type !apply'
-        }
         }
         });
-        message.channel.send('Scrim registration open! @everyone');
+        message.channel.send('Scrim registration open! @everyone\n' +
+            '**' + prefix + 'in**: \tto play in main roster\n' + 
+            '**' + prefix + 'sub**: \tto apply to subs roster\n' +
+            '**' + prefix + 'remove**: \tto remove your name');
     });
 }
 
