@@ -1,17 +1,17 @@
 module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
 
-    const roles = ['RoleA', 'RoleB'];
+    // role check
+    const accessRoles = ['RoleA', 'RoleB'];
     let canAccess = false;
-
-    if (message.member.roles.cache.some(r => roles.includes(r.name))) {
+    if (message.member.roles.cache.some(r => accessRoles.includes(r.name))) {
         canAccess = true;
     }
-
     if (!canAccess) {
         message.reply("you can't use this command!");
         return;
     }
 
+    // arguments check
     if ((args.length != 6)) {
         message.reply("missing arguments!");
         return;
@@ -23,6 +23,7 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
     let numbSubs = args[4];
     let rules = args[5];
 
+    // add to db
     db.collection('scrims').add({
         'DateTimeCreated': new Date(),
         'DateOfScrim': date,
@@ -70,14 +71,15 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
             '**' + prefix + 'remove**: \tto remove your name');
 
 
+        // set global variable focusedID ( scrim id)
         db.collection('scrims')
-        .orderBy('TimeStamp', 'desc').limit(1)
-        .get()
-        .then(snapshot => {
-            snapshot.forEach(q =>{
-                focusedID = q.id;
-            })
-        });
+            .orderBy('TimeStamp', 'desc').limit(1)
+            .get()
+            .then(snapshot => {
+                snapshot.forEach(q => {
+                    focusedID = q.id;
+                })
+            });
     });
 }
 

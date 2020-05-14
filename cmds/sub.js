@@ -1,5 +1,11 @@
 module.exports.run = async (bot, message, args, db) => {
 
+    // id check
+    if(typeof focusedID === 'undefined'){
+        message.channel.send('please ask your scrim manager to create/select a scrim');
+        return;
+    }
+
     let username = message.author.username;
     let userID = message.author.id;
 
@@ -10,6 +16,7 @@ module.exports.run = async (bot, message, args, db) => {
         snapshot.forEach(q => {
             let scrim = q.data();
 
+            // checking scrim status
             if(scrim.state === 'close'){
                 message.channel.send('Scrim registration closed');
                 return;

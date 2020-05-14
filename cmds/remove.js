@@ -1,5 +1,11 @@
 module.exports.run = async (bot, message, args, db) => {
 
+    // id check
+    if(typeof focusedID === 'undefined'){
+        message.channel.send('please use [focus help] to select a scrim or [create] to create a new one');
+        return;
+    }
+
     let username = message.author.username;
     let userID = message.author.id;
 

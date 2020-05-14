@@ -1,12 +1,11 @@
 module.exports.run = async (bot, message, args, db) => {
     
-    const roles = ['RoleA', 'RoleB'];
+    // role check
+    const accessRoles = ['RoleA', 'RoleB'];
     let canAccess = false;
-
-    if (message.member.roles.cache.some(r=>roles.includes(r.name))){
+    if (message.member.roles.cache.some(r=>accessRoles.includes(r.name))){
         canAccess = true;
     }
-
     if(!canAccess){
         message.reply("you can't use this command!");
         return;
