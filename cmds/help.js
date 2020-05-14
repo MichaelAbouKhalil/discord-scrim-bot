@@ -36,6 +36,9 @@ module.exports.run = async (bot, message, args, db) => {
                         name: prefix + 'notify',
                         value: 'Notify rosters to get ready for scrim'
                     }, {
+                        name: prefix + 'rules',
+                        value: 'Displays the rules to follow'
+                    }, {
                         name: prefix + 'focus',
                         value: 'Select a specific Scrim'
                     }, {
