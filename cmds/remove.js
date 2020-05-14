@@ -19,21 +19,17 @@ module.exports.run = async (bot, message, args, db) => {
                 return
             }
 
-            playersIDs = playersIDs.replace(', ' + userID, '');
-            subsIDS = subsIDS.replace(', ' + userID, '');
-            playersIDs = playersIDs.replace(userID, '');
-            subsIDS = subsIDS.replace(userID, '');
-            players = players.replace(', ' + username, '');
-            subs = subs.replace(', ' + username, '');
-            players = players.replace(username, '');
-            subs = subs.replace(username, '');
+            const nPlayers = players.filter(e => e !== username);
+            const nSubs = subs.filter(e => e !== username);
+            const nPlayersIDs = playersIDs.filter(e => e !== userID);
+            const nSubsIDs = subsIDS.filter(e => e !== userID);
 
            // update db
            db.collection('scrims').doc(q.id).update({
-                'Subs': subs,
-                'SubsID': subsIDS,
-                'Players': players,
-                'PlayersID': playersIDs
+                'Subs': nSubs,
+                'SubsID': nSubsIDs,
+                'Players': nPlayers,
+                'PlayersID': nPlayersIDs
             }).then(() =>{
                 message.reply("you're no longer involved in the scrim");
             });

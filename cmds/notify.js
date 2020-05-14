@@ -17,10 +17,8 @@ module.exports.run = async (bot, message, args, db) => {
     .get()
     .then(snapshot => {
         snapshot.forEach(q => {
-            let players = q.data().PlayersID;
-            let subs = q.data().SubsID;
-            let pIds = players.split(",").map(item => item.trim());
-            let sIds = subs.split(",").map(item => item.trim());
+            let pIds = q.data().PlayersID;
+            let sIds = q.data().SubsID;
 
             let pMsg = '';
             let sMsg = '';

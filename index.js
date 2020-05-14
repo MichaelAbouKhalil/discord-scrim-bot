@@ -7,9 +7,10 @@ require('dotenv/config');
 const owner = process.env.OWNER;
 const token = process.env.TOKEN;
 let prefix;
+let focusedID = '1';    
 
 // initialize bot
-const bot = new Discord.Client({disableEveryone: false});
+const bot = new Discord.Client({ disableEveryone: false });
 bot.commands = new Discord.Collection();
 
 // initialise database (firebase)
@@ -28,46 +29,46 @@ bot.on('ready', () => {
     console.log('This bot is online!');
 });
 
-fs.readdir('./cmds', (err,files) => {
+fs.readdir('./cmds', (err, files) => {
     if (err) {
         console.log(err);
     }
 
     let cmdFiles = files.filter(f => f.split(".").pop() === "js");
 
-    if (cmdFiles.length === 0){
+    if (cmdFiles.length === 0) {
         console.log("No files found");
         return;
     }
 
-    cmdFiles.forEach((f,i) => {
+    cmdFiles.forEach((f, i) => {
         let props = require(`./cmds/${f}`);
-        console.log(`${i+1}: ${f} loaded`);
+        console.log(`${i + 1}: ${f} loaded`);
         bot.commands.set(props.help.name, props);
     })
 })
 
 bot.on('message', message => {
-        if(message.author.bot) return;
-        if(message.channel.type === 'dm') return;
-        db.collection('guilds').doc(message.guild.id).get().then((q) => {
-            if(q.exists){
-                prefix = q.data().prefix;
+    if (message.author.bot) return;
+    if (message.channel.type === 'dm') return;
+    db.collection('guilds').doc(message.guild.id).get().then((q) => {
+        if (q.exists) {
+            prefix = q.data().prefix;
+        }
+    }).then(() => {
+        let msg_array = message.content.split(" ");
+        let command = msg_array[0];
+        let args = msg_array.slice(1);
+
+        if (!command.startsWith(prefix)) return;
+
+        if (bot.commands.get(command.slice(prefix.length))) {
+            let cmd = bot.commands.get(command.slice(prefix.length));
+            if (cmd) {
+                cmd.run(bot, message, args, db, FieldValue, prefix);
             }
-        }).then(() => {
-            let msg_array = message.content.split(" ");
-            let command = msg_array[0];
-            let args = msg_array.slice(1);
-    
-            if(!command.startsWith(prefix)) return;
-    
-            if(bot.commands.get(command.slice(prefix.length))){
-                let cmd = bot.commands.get(command.slice(prefix.length));
-                if(cmd){
-                    cmd.run(bot, message, args, db, FieldValue);
-                }
-            }
-        })
+        }
+    })
 });
 
 bot.on('guildCreate', async gData => {
