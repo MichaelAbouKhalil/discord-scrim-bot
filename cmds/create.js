@@ -66,9 +66,9 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
             }
         });
         message.channel.send('Scrim registration open! @everyone\n' +
-            '**' + prefix + 'in**: \tto play in main roster\n' +
-            '**' + prefix + 'sub**: \tto apply to subs roster\n' +
-            '**' + prefix + 'remove**: \tto remove your name');
+            'type **' + prefix + 'in**: \tto play in main roster\n' +
+            'type **' + prefix + 'sub**: \tto apply to subs roster\n' +
+            'type **' + prefix + 'remove**: \tto remove your name');
 
 
         // set global variable focusedID ( scrim id)
