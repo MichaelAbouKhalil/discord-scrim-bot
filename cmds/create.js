@@ -64,10 +64,10 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
                 ],
             }
         });
-        // message.channel.send('Scrim registration open! @everyone\n' +
-        //     '**' + prefix + 'in**: \tto play in main roster\n' +
-        //     '**' + prefix + 'sub**: \tto apply to subs roster\n' +
-        //     '**' + prefix + 'remove**: \tto remove your name');
+        message.channel.send('Scrim registration open! @everyone\n' +
+            '**' + prefix + 'in**: \tto play in main roster\n' +
+            '**' + prefix + 'sub**: \tto apply to subs roster\n' +
+            '**' + prefix + 'remove**: \tto remove your name');
 
 
         db.collection('scrims')

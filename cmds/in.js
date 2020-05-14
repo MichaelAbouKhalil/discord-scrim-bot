@@ -21,19 +21,18 @@ module.exports.run = async (bot, message, args, db) => {
             let subsIds = scrim.SubsID;
 
             // if user already applied => ignore
-            // if(ids.includes(userID)) {
-            //     message.reply('already applied for main!');
-            //     return;
-            // }
+            if(ids.includes(userID)) {
+                message.reply('already applied for main!');
+                return;
+            }
 
             // if user already applied => ignore
-            // if(subsIds.includes(userID)) {
-            //     message.reply('already applied for subs!');
-            //     return;
-            // }
+            if(subsIds.includes(userID)) {
+                message.reply('already applied for subs!');
+                return;
+            }
 
             // if number of player is maxed => ignore
-            // var arr = players.split(",").map(item => item.trim());
             if(scrim.NumberOfPlayers == players.length){
                 message.reply('Scrim mains is full!');
                 return;
