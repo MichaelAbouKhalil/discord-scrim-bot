@@ -1,7 +1,7 @@
 module.exports.run = async (bot, message, args, db) => {
 
     // role check
-    const accessRoles = ['RoleA', 'RoleB'];
+    const accessRoles = ['Scrim Manager'];
     let canAccess = false;
     if (message.member.roles.cache.some(r => accessRoles.includes(r.name))) {
         canAccess = true;
