@@ -2,7 +2,7 @@
 module.exports.run = async (bot, message, args, db) => {
 
     if(typeof focusedID === 'undefined'){
-        message.channel.send('please ask your scrim manager to create/select a scrim');
+        message.channel.send('No scrims planned currently. Please ask your scrim manager to create/select a scrim.');
         return;
     }
 

@@ -27,6 +27,8 @@ admin.initializeApp({
 let db = admin.firestore();
 
 bot.on('ready', () => {
+    focusedID = '1';
+    console.log('focusID= ' + focusedID);
     console.log('This bot is online!');
 });
 
