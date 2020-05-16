@@ -52,8 +52,13 @@ fs.readdir('./cmds', (err, files) => {
 })
 
 bot.on('message', message => {
+    // if another bot ignore
     if (message.author.bot) return;
+    // if dm ignore
     if (message.channel.type === 'dm') return;
+    // restrict channel: --scrims-internal -- general
+    if (!msg.channel.id === '697087280518529035' && !msg.channel.id === '709725120381452289') return;
+
     db.collection('guilds').doc(message.guild.id).get().then((q) => {
         if (q.exists) {
             prefix = q.data().prefix;
