@@ -57,7 +57,8 @@ bot.on('message', message => {
     // if dm ignore
     if (message.channel.type === 'dm') return;
     // restrict channel: --scrims-internal -- general
-    if (!message.channel.id === '697087280518529035' && !message.channel.id === '709725120381452289') return;
+    let accessChannels = ['697087280518529035', '709725120381452289'];
+    if (!accessChannels.includes(message.channel.id)) return;
 
     db.collection('guilds').doc(message.guild.id).get().then((q) => {
         if (q.exists) {
