@@ -37,5 +37,5 @@ module.exports.run = async (bot, message, args, db) => {
 }
 
 module.exports.help = {
-    name: 'updateTime'
+    name: 'updatetime'
 }

@@ -42,13 +42,13 @@ module.exports.run = async (bot, message, args, db) => {
                         name: prefix + 'focus',
                         value: 'Select a specific Scrim'
                     }, {
-                        name: prefix + 'updateDate',
+                        name: prefix + 'updatedate',
                         value: 'updates scrim date'
                     }, {
-                        name: prefix + 'updateTime',
+                        name: prefix + 'updatetime',
                         value: 'updates scrim time'
                     }, {
-                        name: prefix + 'updateRules',
+                        name: prefix + 'updaterules',
                         value: 'update scrim rules'
                     }, {
                         name: prefix + 'help',

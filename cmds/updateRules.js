@@ -36,5 +36,5 @@ module.exports.run = async (bot, message, args, db) => {
 }
 
 module.exports.help = {
-    name: 'updateRules'
+    name: 'updaterules'
 }
