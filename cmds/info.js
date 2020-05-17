@@ -13,17 +13,17 @@ module.exports.run = (bot, message, args, db) => {
             let players = '';
             let subs = '';
 
-            if(q.data().Subs.length != 0){
-                q.data().Subs.forEach(q => {
-                    subs += q + ' ';
-                });
-            }
+            // if(q.data().Subs.length != 0){
+            //     q.data().Subs.forEach(q => {
+            //         subs += q + ' ';
+            //     });
+            // }
 
-            if(q.data().Players.length != 0){
-                q.data().Players.forEach(q => {
-                    players += q + ' ';
-                });
-            }
+            // if(q.data().Players.length != 0){
+            //     q.data().Players.forEach(q => {
+            //         players += q + ' ';
+            //     });
+            // }
 
             players = players === '' ? 'None' : players;
             subs = subs === '' ? 'None' : subs;
@@ -53,10 +53,10 @@ module.exports.run = (bot, message, args, db) => {
                         inline: true
                     }, {
                         name: 'Players',
-                        value: players
+                        value: q.data().Players
                     }, {
                         name: 'Subs',
-                        value: subs
+                        value: q.data().Subs
                     }
                     ]
                 }

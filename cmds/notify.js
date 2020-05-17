@@ -17,6 +17,28 @@ module.exports.run = async (bot, message, args, db) => {
         return;
     }
 
+    if(args.length != 1){
+        message.channel.send('Missing arguments!');
+        return;
+    }
+
+    let playerMessage;
+    let subMessage;
+
+    if(args[0] === '1'){
+        playerMessage = '\nDON\'T FORGET YOU\'RE SCRIMMING TODAY';
+        subMessage = '\nDON\'T FORGET YOU\'RE ON THE SUB LIST';
+    }else if(args[0] === '2'){
+        playerMessage = '';
+        subMessage = '\nSCRIM IS SOON. BE READY';
+    }else if(args[0] === '2'){
+        playerMessage = '\nGET ONLINE';
+        subMessage = '\nSUBS STAY ON STANDBY';
+    }else {
+        message.channel.send('Wrong arguments!');
+        return;
+    }
+
     db.collection('scrims')
     .orderBy('TimeStamp', 'desc').limit(1)
     .get()
@@ -32,7 +54,7 @@ module.exports.run = async (bot, message, args, db) => {
                 pMsg += '<@' + p + '> '
             });
             if(pIds != 0){
-                pMsg += '\nGET READY TO SCRIM!';
+                pMsg += playerMessage;
                 message.channel.send(pMsg);
             }
 
@@ -40,7 +62,7 @@ module.exports.run = async (bot, message, args, db) => {
                 sMsg += '<@' + s + '> '
             });
             if(sIds != 0){
-                sMsg += '\nSUBS STAY ON STANDBY';
+                sMsg += subMessage;
                 message.channel.send(sMsg);
             }
             
