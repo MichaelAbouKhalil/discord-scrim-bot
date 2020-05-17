@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args, db) => {
     }else if(args[0] === '2'){
         playerMessage = '';
         subMessage = '\nSCRIM IS SOON. BE READY';
-    }else if(args[0] === '2'){
+    }else if(args[0] === '3'){
         playerMessage = '\nGET ONLINE';
         subMessage = '\nSUBS STAY ON STANDBY';
     }else {
