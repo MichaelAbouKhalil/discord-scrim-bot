@@ -53,10 +53,10 @@ module.exports.run = (bot, message, args, db) => {
                         inline: true
                     }, {
                         name: 'Players',
-                        value: q.data().Players
+                        value: q.data().Players.length == 0 ? 'NONE' : q.data().Players
                     }, {
                         name: 'Subs',
-                        value: q.data().Subs
+                        value: q.data().Subs.length == 0 ? 'NONE' : q.data().Subs
                     }
                     ]
                 }
