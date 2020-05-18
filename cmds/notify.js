@@ -62,7 +62,7 @@ module.exports.run = async (bot, message, args, db) => {
                 let reply = '';
 
                 if (!emptyPlayers) {
-                    reply += pMsg + playerMessage;
+                    reply += pMsg + playerMessage + '\n';
                 }
                 if (!emptySubs) {
                     reply += sMsg + subMessage;
