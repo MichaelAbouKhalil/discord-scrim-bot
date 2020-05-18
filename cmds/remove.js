@@ -10,17 +10,16 @@ module.exports.run = async (bot, message, args, db) => {
     let userID = message.author.id;
 
     db.collection('scrims')
-    .orderBy('TimeStamp', 'desc').limit(1)
+    .doc(focusedID)
     .get()
-    .then(snapshot => {
-        snapshot.forEach(q => {
+    .then(q => {
             let playersIDs = q.data().PlayersID;
             let subsIDS = q.data().SubsID;
             
             let players = q.data().Players;
             let subs = q.data().Subs;
             
-            if(!playersIDs.includes() && subsIDS.includes()){
+            if(!playersIDs.includes(userID) && !subsIDS.includes(userID)){
                 message.reply('you did not apply!');
                 return
             }
@@ -39,7 +38,6 @@ module.exports.run = async (bot, message, args, db) => {
             }).then(() =>{
                 message.reply("you're no longer involved in the scrim");
             });
-        })
     });
 }
 

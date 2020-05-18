@@ -10,10 +10,9 @@ module.exports.run = async (bot, message, args, db) => {
     let userID = message.author.id;
 
     db.collection('scrims')
-    .orderBy('TimeStamp', 'desc').limit(1)
+    .doc(focusedID)
     .get()
-    .then(snapshot => {
-        snapshot.forEach(q => {
+    .then(q => {
             let scrim = q.data();
 
             // check scrim status
@@ -55,7 +54,6 @@ module.exports.run = async (bot, message, args, db) => {
             }).then(() =>{
                 message.reply("you've been put down to play scrim");
             });
-        });
     });
 
 }

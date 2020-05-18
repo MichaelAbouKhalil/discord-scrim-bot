@@ -10,10 +10,9 @@ module.exports.run = async (bot, message, args, db) => {
     let userID = message.author.id;
 
     db.collection('scrims')
-    .orderBy('TimeStamp', 'desc').limit(1)
+    .doc(focusedID)
     .get()
-    .then(snapshot => {
-        snapshot.forEach(q => {
+    .then(q => {
             let scrim = q.data();
 
             // checking scrim status
@@ -53,9 +52,8 @@ module.exports.run = async (bot, message, args, db) => {
                 'Subs': subs,
                 'SubsID': subsIds
             }).then(() =>{
-                message.reply("you're down as a sub");
+                message.channel.send('<@' + userID + '> you\'ve been put down as a sub');
             });
-        });
     });
 }
 
