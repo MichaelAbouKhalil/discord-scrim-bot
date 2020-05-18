@@ -28,7 +28,8 @@ let db = admin.firestore();
 
 bot.on('ready', () => {
     focusedID = '1';
-    console.log('focusID= ' + focusedID);
+    let cmd = bot.commands.get('autofocus');
+    cmd.run(bot, db);
     console.log('This bot is online!');
 });
 
