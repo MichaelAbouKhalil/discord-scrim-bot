@@ -65,7 +65,7 @@ module.exports.run = async (bot, message, args, db) => {
                 sMsg += subMessage;
                 message.channel.send(sMsg);
             }
-            if(sIds == 0 && aegs[0] === '2'){
+            if(sIds == 0 && args[0] === '2'){
                 message.channel.send(sMsg);
             }
             
