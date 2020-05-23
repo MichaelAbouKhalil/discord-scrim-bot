@@ -27,11 +27,11 @@ module.exports.run = async (bot, message, args, db) => {
             db.collection('scrims').doc(q.id).update({
                 'state': 'close'
             }).then(() => {
-                message.channel.send('SCRIM REGISTRATION CLOSED. YOU CAN NO LONGER REACT TO IT.');
+                message.channel.send('SCRIM REGISTRATION CANCELLED AND CLOSED DUE TO LOW TURNOUT.');
             });
         });
 }
 
 module.exports.help = {
-    name: 'close'
+    name: 'cancelled'
 }

@@ -65,7 +65,7 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
                 ],
             }
         });
-        message.channel.send('Scrim registration open! @everyone\n' +
+        message.channel.send('SCRIM REGISTRATION OPEN. CLAIM YOUR SPOT BEFORE IT\'S GONE!\n@everyone\n' +
             'type **' + prefix + 'in**: to play in main roster\n' +
             'type **' + prefix + 'sub**: to apply to subs roster\n' +
             'type **' + prefix + 'remove**: to remove your name\n' +
