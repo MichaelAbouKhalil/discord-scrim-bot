@@ -42,10 +42,10 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
             embed: {
                 color: 0x3338FF,
                 title: 'Scrim Info!',
-                description: 'Hi everyone. Below you\'ll find the details of the upcoming internal scrim.\n' +
-                'Everyone is allowed to get involved. Spots are limited and work on a first come first served basis.\n' +
+                description: '\nHi everyone. Below you\'ll find the details of the upcoming internal scrim.\n' +
+                'Everyone is allowed to get involved. Spots are limited and work on a first come first served basis.\n\n' +
                 "I strongly recommend for new memebers to get involved and have some fun. This will be a way to show your skills to the others." +
-                ' And don\'t worry if you perform badly. It\'s all about practising and improving at the end of the day. Enjoy!',
+                ' And don\'t worry if you perform badly. It\'s all about practising and improving at the end of the day. Enjoy!\n',
                 fields: [{
                     name: 'Date',
                     value: date,
@@ -69,7 +69,7 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
                 ],
             }
         });
-        message.channel.send('SCRIM REGISTRATION OPEN. CLAIM YOUR SPOT BEFORE IT\'S GONE!\n@everyone\n' +
+        message.channel.send('SCRIM REGISTRATION OPEN. CLAIM YOUR SPOT BEFORE IT\'S GONE!\n\n@everyone\n' +
             'type **' + prefix + 'in**: to play in main roster\n' +
             'type **' + prefix + 'sub**: to apply to subs roster\n' +
             'type **' + prefix + 'remove**: to remove your name\n' +
