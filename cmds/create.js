@@ -23,6 +23,11 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
     let numbSubs = args[4];
     let rules = args[5];
 
+    message.channel.send('Hi everyone. Below you\'ll find the details of the upcoming internal scrim.\n' +
+    'Everyone is allowed to get involved. Spots are limited and work on a first come first served basis.\n' +
+    "I strongly recommend for new memebers to get involved and have some fun. This will be a way to show your skills to the others." +
+    ' And don\'t worry if you perform badly. It\'s all about practising and improving at the end of the day. Enjoy!');
+
     // add to db
     db.collection('scrims').add({
         'DateTimeCreated': new Date(),
