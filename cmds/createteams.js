@@ -23,6 +23,7 @@ module.exports.run = async (bot, message, args, db) => {
         .get()
         .then(q => {
             let players = q.data().PlayersID;
+            let subs = q.data().SubsID;
             if (players.length % 2 != 0) {
                 message.channel.send('Number of players is odd');
                 return;
@@ -48,6 +49,12 @@ module.exports.run = async (bot, message, args, db) => {
                     teamB.forEach(p => {
                         msg += '<@' + p + '>\n';
                     });
+                    if (subs.length != 0) {
+                        msg += '\n\nSubs:\n\n';
+                        subs.forEach(s => {
+                            msg += '<@' + s + '>\n';
+                        })
+                    }
                     message.channel.send(msg);
                 });
         });
