@@ -8,7 +8,7 @@ const moment = require('moment');
 const owner = process.env.OWNER;
 const token = process.env.TOKEN;
 let prefix;
-let focusedID = '1';    
+let focusedID = '1';
 
 // initialize bot
 const bot = new Discord.Client({ disableEveryone: false });
@@ -30,7 +30,8 @@ bot.on('ready', () => {
     focusedID = '1';
     let cmd = bot.commands.get('autofocus');
     cmd.run(bot, db);
-    console.log('This bot is online!');
+    bot.user.setActivity('^help', { type: 'PLAYING' });
+    console.log(bot.user.username + ' is online!');
 });
 
 fs.readdir('./cmds', (err, files) => {
