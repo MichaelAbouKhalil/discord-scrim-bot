@@ -20,6 +20,10 @@ module.exports.run = async (bot, message, args, db) => {
                 message.channel.send('Scrim registration closed');
                 return;
             }
+            if(scrim.state === 'cancelled'){
+                message.channel.send('Scrim registration cancelled');
+                return;
+            }
             
             let players = scrim.Players;
             let subs = scrim.Subs;

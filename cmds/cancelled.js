@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args, db) => {
 
             // update db
             db.collection('scrims').doc(q.id).update({
-                'state': 'close'
+                'state': 'cancelled'
             }).then(() => {
                 message.channel.send('SCRIM REGISTRATION CANCELLED AND CLOSED DUE TO LOW TURNOUT.');
             });

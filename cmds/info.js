@@ -13,6 +13,11 @@ module.exports.run = (bot, message, args, db) => {
             let players = '';
             let subs = '';
 
+            if(q.data().state === 'cancelled'){
+                message.channel.send('UPCOMING SCRIM CANCELLED!');
+                return;
+            }
+
             // if(q.data().Subs.length != 0){
             //     q.data().Subs.forEach(q => {
             //         subs += q + ' ';
