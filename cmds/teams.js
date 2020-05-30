@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args, db) => {
             teamA.forEach(p => {
                 msg += '<@' + p + '>\n';
             });
-            msg += 'Vs.\n';
+            msg += '\nVs.\n\n';
             teamB.forEach(p => {
                 msg += '<@' + p + '>\n';
             });
