@@ -35,6 +35,8 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix) => {
         'PlayersID': [],
         'Subs': [],
         'SubsID': [],
+        'TeamA': [],
+        'TeamB': [],
         'TimeStamp': FieldValue.serverTimestamp(),
         'state': 'open'
     }).then(() => {
