@@ -57,12 +57,14 @@ module.exports.run = async (bot, message, args, db) => {
             subs.push(username);
             subsIds.push(userID);
 
+            let rem = '**' + ids.length + '/' + scrim.NumberOfSubs + '** remaining';
+
             // update db
             db.collection('scrims').doc(q.id).update({
                 'Subs': subs,
                 'SubsID': subsIds
             }).then(() => {
-                message.channel.send('<@' + userID + '> you\'ve been put down as a sub');
+                message.channel.send('<@' + userID + '> you\'ve been put down as a sub. ');
             });
         });
 }

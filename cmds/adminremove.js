@@ -21,6 +21,12 @@ module.exports.run = async (bot, message, args, db) => {
         let username = u.username;
         let userID = u.id;
 
+        message.guild.members.cache.forEach(m => {
+            if (m.user.id === userID) {
+                username = m.displayName;
+            }
+        });
+
         db.collection('scrims')
             .doc(focusedID)
             .get()

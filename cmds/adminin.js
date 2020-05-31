@@ -33,6 +33,12 @@ module.exports.run = async (bot, message, args, db) => {
                 let username = u.username;
                 let userID = u.id;
 
+                message.guild.members.cache.forEach(m => {
+                    if (m.user.id === userID) {
+                        username = m.displayName;
+                    }
+                });
+
                 let players = scrim.Players;
                 let subs = scrim.Subs;
                 let ids = scrim.PlayersID;
