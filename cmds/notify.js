@@ -44,19 +44,19 @@ module.exports.run = async (bot, message, args, db) => {
         .get()
         .then(snapshot => {
             snapshot.forEach(q => {
-                let emptyPlayers = q.data().PlayersID.length == 0;
-                let emptySubs = q.data().SubsID.length == 0;
-                let pIds = q.data().PlayersID;
-                let sIds = q.data().SubsID;
+                let emptyPlayers = q.data().Players.length == 0;
+                let emptySubs = q.data().Subs.length == 0;
+                let players = q.data().Players;
+                let subs = q.data().Subs;
 
                 let pMsg = '';
                 let sMsg = '';
 
-                pIds.forEach(p => {
-                    pMsg += '<@' + p + '> '
+                players.forEach(p => {
+                    pMsg += '<@' + p.id + '> '
                 });
-                sIds.forEach(s => {
-                    sMsg += '<@' + s + '> '
+                subs.forEach(s => {
+                    sMsg += '<@' + s.id + '> '
                 });
 
                 let reply = '';

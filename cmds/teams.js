@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args, db) => {
         .then(q => {
             let teamA = q.data().TeamA;
             let teamB = q.data().TeamB;
-            let subs = q.data().SubsID;
+            let subs = q.data().Subs;
 
             if (teamA.length == 0 || teamB.length == 0) {
                 message.channel.send('Teams not created yet!');
@@ -22,16 +22,16 @@ module.exports.run = async (bot, message, args, db) => {
 
             let msg = 'The teams for today are as follows:\n\n';
             teamA.forEach(p => {
-                msg += '<@' + p + '>\n';
+                msg += '<@' + p.id + '>\n';
             });
             msg += '\nVs.\n\n';
             teamB.forEach(p => {
-                msg += '<@' + p + '>\n';
+                msg += '<@' + p.id + '>\n';
             });
             if (subs.length != 0) {
                 msg += '\n\nSubs:\n\n';
                 subs.forEach(s => {
-                    msg += '<@' + s + '>\n';
+                    msg += '<@' + s.id + '>\n';
                 });
             }
             message.channel.send(msg);

@@ -22,41 +22,47 @@ module.exports.run = async (bot, message, args, db) => {
         .doc(focusedID)
         .get()
         .then(q => {
-            let players = q.data().PlayersID;
-            let subs = q.data().SubsID;
+            let players = q.data().Players;
+            let subs = q.data().Subs;
+            let exit = false;
             if (players.length % 2 != 0) {
                 message.channel.send('Number of players is odd');
-                return;
+                exit = true;
             }
 
-            shuffle(players);
-            let halfwayThrough = Math.floor(players.length / 2)
+            if (!exit) {
+                // randomize array
+                shuffle(players);
+                let halfwayThrough = Math.floor(players.length / 2)
 
-            let teamA = players.slice(0, halfwayThrough);
-            let teamB = players.slice(halfwayThrough, players.length);
+                // split array in 2
+                let teamA = players.slice(0, halfwayThrough);
+                let teamB = players.slice(halfwayThrough, players.length);
 
-            db.collection('scrims')
-                .doc(focusedID)
-                .update({
-                    'TeamA': teamA,
-                    'TeamB': teamB
-                }).then(() => {
-                    let msg = 'The teams for today are as follows:\n\n';
-                    teamA.forEach(p => {
-                        msg += '<@' + p + '>\n';
+                // update db
+                db.collection('scrims')
+                    .doc(focusedID)
+                    .update({
+                        'TeamA': teamA,
+                        'TeamB': teamB
+                    }).then(() => {
+                        let msg = 'The teams for today are as follows:\n\n';
+                        teamA.forEach(p => {
+                            msg += '<@' + p.id + '>\n';
+                        });
+                        msg += '\nVs.\n\n';
+                        teamB.forEach(p => {
+                            msg += '<@' + p.id + '>\n';
+                        });
+                        if (subs.length != 0) {
+                            msg += '\n\nSubs:\n\n';
+                            subs.forEach(s => {
+                                msg += '<@' + s.id + '>\n';
+                            })
+                        }
+                        message.channel.send(msg);
                     });
-                    msg += '\nVs.\n\n';
-                    teamB.forEach(p => {
-                        msg += '<@' + p + '>\n';
-                    });
-                    if (subs.length != 0) {
-                        msg += '\n\nSubs:\n\n';
-                        subs.forEach(s => {
-                            msg += '<@' + s + '>\n';
-                        })
-                    }
-                    message.channel.send(msg);
-                });
+            }
         });
 }
 

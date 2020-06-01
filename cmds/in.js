@@ -9,11 +9,17 @@ module.exports.run = async (bot, message, args, db) => {
     let username = message.author.username;
     let userID = message.author.id;
 
+    // find player username
     message.guild.members.cache.forEach(m => {
         if (m.user.id === userID) {
             username = m.displayName;
         }
     });
+
+    let player = {
+        id: userID,
+        username: username
+    };
 
     db.collection('scrims')
         .doc(focusedID)
@@ -33,39 +39,40 @@ module.exports.run = async (bot, message, args, db) => {
 
             let players = scrim.Players;
             let subs = scrim.Subs;
-            let ids = scrim.PlayersID;
-            let subsIds = scrim.SubsID;
+            let exit = false;
 
             // if user already applied => ignore
-            if (ids.includes(userID)) {
-                message.reply('already applied for main!');
-                return;
-            }
+            players.forEach(p => {
+                if (p.id === player.id) {
+                    message.reply('already applied for main!');
+                    exit = true;
+                }
+            });
 
             // if user already applied => ignore
-            if (subsIds.includes(userID)) {
-                message.reply('already applied for subs!');
-                return;
-            }
+            subs.forEach(s => {
+                if (s.id === player.id) {
+                    message.reply('already applied for subs!');
+                    exit == true;
+                }
+            });
+
 
             // if number of player is maxed => ignore
             if (scrim.NumberOfPlayers == players.length) {
                 message.reply('Scrim mains is full!');
-                return;
+                exit = true;
             }
+            if (!exit) {
+                players.push(player);
 
-            players.push(username);
-            ids.push(userID);
-
-            let rem = '**' + ids.length + '/' + scrim.NumberOfPlayers + '**';
-
-            // update db
-            db.collection('scrims').doc(q.id).update({
-                'Players': players,
-                'PlayersID': ids
-            }).then(() => {
-                message.reply("you've been put down to play scrim. ");
-            });
+                // update db
+                db.collection('scrims').doc(q.id).update({
+                    'Players': players
+                }).then(() => {
+                    message.reply("you've been put down to play scrim. ");
+                });
+            }
         });
 
 }

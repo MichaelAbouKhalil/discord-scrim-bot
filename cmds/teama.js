@@ -24,9 +24,18 @@ module.exports.run = async (bot, message, args, db) => {
 
     let mentions = [];
     message.mentions.users.forEach(u => {
+        let id = u.id;
+        let username = u.username;
+
+        // find player displayname
+        message.guild.members.cache.forEach(m => {
+            if (m.user.id === id) {
+                username = m.displayName;
+            }
+        });
         mentions.push({
-            id: u.id,
-            username: u.username
+            id: id,
+            username: username
         });
     });
 
@@ -39,35 +48,53 @@ module.exports.run = async (bot, message, args, db) => {
             let teamB = scrim.TeamB;
             let players = scrim.Players;
             let found = false;
+            let l = 0;
 
             mentions.forEach(m => {
-                if (teamB.includes(m.id)) {
-                    message.channel.send('<@' + m.id + '> is already in another team!');
-                    found = true;
+                found = false;
+                players.forEach(p => {
+                    if (p.id === m.id) {
+                        found = true;
+                        l++;
+                    }
+                });
+                if (!found) {
+                    message.channel.send('<@' + m.id + '> did not apply to play!');
                 }
             });
 
-            if (found) {
-                return;
-            }
-
-            mentions.forEach(m => {
-                teamA.push(m.id);
-            });
-
-            let teamMessage = 'Team A: ';
-            mentions.forEach(m => {
-                teamMessage += '\n<@' + m.id + '>';
-            });
-            teamMessage += '\nCreated successfully!'
-
-            db.collection('scrims')
-                .doc(focusedID)
-                .update({
-                    'TeamA': teamA
-                }).then(() => {
-                    message.channel.send(teamMessage);
+            if (l === mentions.length) {
+                found = false;
+                mentions.forEach(m => {
+                    teamB.forEach(p => {
+                        if (p.id === m.id) {
+                            message.channel.send('<@' + m.id + '> is already in another team!');
+                            found = true;
+                        }
+                    })
                 });
+
+                if (!found) {
+
+                    mentions.forEach(m => {
+                        teamA.push(m);
+                    });
+
+                    let teamMessage = 'Team A: ';
+                    mentions.forEach(m => {
+                        teamMessage += '\n<@' + m.id + '>';
+                    });
+                    teamMessage += '\nCreated successfully!'
+
+                    db.collection('scrims')
+                        .doc(focusedID)
+                        .update({
+                            'TeamA': teamA
+                        }).then(() => {
+                            message.channel.send(teamMessage);
+                        });
+                }
+            }
         });
 }
 

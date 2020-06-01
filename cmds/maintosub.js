@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args, db) => {
         .then(q => {
             let scrim = q.data();
 
-            if (message.mentions.users.keyArray().length + scrim.SubsID.length > scrim.NumberOfSubs) {
+            if (message.mentions.users.keyArray().length + scrim.Subs.length > scrim.NumberOfSubs) {
                 message.reply('Number of players to add exceed the number of subs allowed');
                 return;
             }
@@ -39,43 +39,54 @@ module.exports.run = async (bot, message, args, db) => {
                     }
                 });
 
+                let player = {
+                    id: userID,
+                    username : username
+                };
+
                 let players = scrim.Players;
                 let subs = scrim.Subs;
-                let ids = scrim.PlayersID;
-                let subsIds = scrim.SubsID;
+                let found = false;
 
-                // if user already applied => ignore
-                if (!ids.includes(userID)) {
-                    message.reply(username + ' did not apply for main!');
-                    return;
-                }
-
-                // if user already applied => ignore
-                if (subsIds.includes(userID)) {
-                    message.reply(username + ' already applied for subs!');
-                    return;
-                }
-
-                // if number of player is maxed => ignore
-                if (scrim.NumberOfSubs == subs.length) {
-                    message.reply('Scrim subs is full!');
-                    return;
-                }
-
-                subs.push(username);
-                subsIds.push(userID);
-                players = players.filter(item => item !== username);
-                ids = ids.filter(item => item !== userID);
-
-                // update db
-                db.collection('scrims').doc(q.id).update({
-                    'Players': players,
-                    'PlayersID': ids,
-                    'Subs': subs,
-                    'SubsID': subsIds
-                }).then(() => {
-                    message.channel.send('<@' + userID + '> you\'ve been put down as a sub');
+                // check if player in main
+                players.forEach(p => {
+                    if (p.id === player.id) {
+                        found = true;
+                    }
                 });
+                if(!found){ // player not in main
+                    message.reply(player.username + ' did not apply for main!');
+                }else{
+                    found = false;
+                    // if user already applied in sub
+                    subs.forEach(s => {
+                        if (s.id === player.id) {
+                            message.reply(player.username + ' already applied for subs!');
+                            found = true;
+                        }
+                    });
+
+                    // if number of player is maxed => ignore
+                    if (scrim.NumberOfSubs == subs.length) {
+                        message.reply('Scrim subs is full!');
+                        found = true;
+                    }
+
+                    if (!found) {
+                        // add player to subs
+                        subs.push(player);
+                        // remove player from mains
+                        players = players.filter(item => item.id !== player.id);
+
+                        // update db
+                        db.collection('scrims').doc(q.id).update({
+                            'Players': players,
+                            'Subs': subs
+                        }).then(() => {
+                            message.channel.send('<@' + player.id + '> you\'ve been put down as a sub');
+                        });
+                    }
+                }
             });
         });
 

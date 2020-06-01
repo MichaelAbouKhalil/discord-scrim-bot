@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args, db) => {
         .then(q => {
             let scrim = q.data();
 
-            if (message.mentions.users.keyArray().length + scrim.PlayersID.length > scrim.NumberOfPlayers) {
+            if (message.mentions.users.keyArray().length + scrim.Players.length > scrim.NumberOfPlayers) {
                 message.reply('Number of players to add exceed the number of players allowed');
                 return;
             }
@@ -39,39 +39,47 @@ module.exports.run = async (bot, message, args, db) => {
                     }
                 });
 
+                let player = {
+                    id: userID,
+                    username : username
+                };
+
                 let players = scrim.Players;
                 let subs = scrim.Subs;
-                let ids = scrim.PlayersID;
-                let subsIds = scrim.SubsID;
+                let exit = false;
 
                 // if user already applied => ignore
-                if (ids.includes(userID)) {
-                    message.reply(username + ' already applied for main!');
-                    return;
-                }
+                players.forEach(p => {
+                    if (p.id === player.id) {
+                        message.reply(player.username + ' already applied for main!');
+                        exit = true;
+                    }
+                });
 
                 // if user already applied => ignore
-                if (subsIds.includes(userID)) {
-                    message.reply(username + ' already applied for subs!');
-                    return;
-                }
+                subs.forEach(s => {
+                    if (s.id === player.id) {
+                        message.reply(player.username + ' already applied for subs!');
+                        exit == true;
+                    }
+                });
 
                 // if number of player is maxed => ignore
                 if (scrim.NumberOfPlayers == players.length) {
                     message.reply('Scrim mains is full!');
-                    return;
+                    exit = true;
                 }
 
-                players.push(username);
-                ids.push(userID);
+                if (!exit) {
+                    players.push(player);
 
-                // update db
-                db.collection('scrims').doc(q.id).update({
-                    'Players': players,
-                    'PlayersID': ids
-                }).then(() => {
-                    message.channel.send('<@' + userID + '> you\'ve been put down to play scrim');
-                });
+                    // update db
+                    db.collection('scrims').doc(q.id).update({
+                        'Players': players
+                    }).then(() => {
+                        message.channel.send('<@' + player.id + '> you\'ve been put down to play scrim');
+                    });
+                }
             });
         });
 
