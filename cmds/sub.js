@@ -17,62 +17,80 @@ module.exports.run = async (bot, message, args, db) => {
 
     let player = {
         id: userID,
-        username : username
+        username: username
     };
 
-    db.collection('scrims')
-        .doc(focusedID)
-        .get()
-        .then(q => {
-            let scrim = q.data();
+    let filter = m => m.author.id === message.author.id;
+    message.reply("if you're put down for the scrim, will you use a mic? Reply with yes or no within 10 seconds or else you'll have to start all over.")
+    .then(r => r.delete({ timeout: 10000 }));
 
-            // checking scrim status
-            if (scrim.state === 'close') {
-                message.channel.send('Scrim registration closed');
-                return;
-            }
-            if (scrim.state === 'cancelled') {
-                message.channel.send('Scrim registration cancelled');
-                return;
-            }
+    message.channel.awaitMessages(filter, {
+        max: 1,
+        time: 10000,
+        errors: ['time']
+    }).then(collected => {
 
-            let players = scrim.Players;
-            let subs = scrim.Subs;
-            let exit = false;
+        if (collected.first().content.toLowerCase() === 'no') {
+            return message.reply("in that case you can't participate in the scrim. Use of mic is mandatory. Sorry.");
+        } else if (collected.first().content.toLowerCase() === 'yes') {
 
-            // if user already applied => ignore
-            players.forEach(p => {
-                if (p.id === player.id) {
-                    message.reply('already applied for main!');
-                    exit = true;
-                }
-            });
+            db.collection('scrims')
+                .doc(focusedID)
+                .get()
+                .then(q => {
+                    let scrim = q.data();
 
-            // if user already applied => ignore
-            subs.forEach(s => {
-                if (s.id === player.id) {
-                    message.reply('already applied for subs!');
-                    exit = true;
-                }
-            });
+                    // checking scrim status
+                    if (scrim.state === 'close') {
+                        message.channel.send('Scrim registration closed');
+                        return;
+                    }
+                    if (scrim.state === 'cancelled') {
+                        message.channel.send('Scrim registration cancelled');
+                        return;
+                    }
 
-            // if number of player is maxed => ignore
-            if (scrim.NumberOfSubs == subs.length) {
-                message.reply('Scrim subs is full!');
-                exit = true;
-            }
+                    let players = scrim.Players;
+                    let subs = scrim.Subs;
+                    let exit = false;
 
-            if (!exit) {
-                subs.push(player);
+                    // if user already applied => ignore
+                    players.forEach(p => {
+                        if (p.id === player.id) {
+                            message.reply('already applied for main!');
+                            exit = true;
+                        }
+                    });
 
-                // update db
-                db.collection('scrims').doc(q.id).update({
-                    'Subs': subs
-                }).then(() => {
-                    message.channel.send('<@' + userID + '> you\'ve been put down as a sub. ');
+                    // if user already applied => ignore
+                    subs.forEach(s => {
+                        if (s.id === player.id) {
+                            message.reply('already applied for subs!');
+                            exit = true;
+                        }
+                    });
+
+                    // if number of player is maxed => ignore
+                    if (scrim.NumberOfSubs == subs.length) {
+                        message.reply('Scrim subs is full!');
+                        exit = true;
+                    }
+
+                    if (!exit) {
+                        subs.push(player);
+
+                        // update db
+                        db.collection('scrims').doc(q.id).update({
+                            'Subs': subs
+                        }).then(() => {
+                            message.reply("you've been put down for the scrim. Please note if you don't use your mic, you'll be banned from future scrims. Thanks.");
+                        });
+                    }
                 });
-            }
-        });
+        } else {
+            return message.reply("only yes or no answers allowed.");
+        }
+    }).catch(err => {});
 }
 
 module.exports.help = {

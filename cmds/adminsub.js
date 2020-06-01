@@ -17,6 +17,10 @@ module.exports.run = async (bot, message, args, db) => {
         return;
     }
 
+    if (args.length != 1) {
+        message.reply("please mention only 1 player");
+        return;
+    }
 
     db.collection('scrims')
         .doc(focusedID)
@@ -41,48 +45,65 @@ module.exports.run = async (bot, message, args, db) => {
 
                 let player = {
                     id: userID,
-                    username : username
+                    username: username
                 };
 
-                let players = scrim.Players;
-                let subs = scrim.Subs; 
-                let exit = false;
+                let filter = m => m.author.id === message.author.id;
+                message.reply("Before this player gets added, can you confirm he/she will use a mic? Answer with yes or no. **expires in 10 seconds**")
+                    .then(r => r.delete({ timeout: 10000 }));
 
-                // if user already applied => ignore
-                players.forEach(p => {
-                    if (p.id === player.id) {
-                        message.reply(player.username + ' already applied for main!');
-                        exit = true;
+                message.channel.awaitMessages(filter, {
+                    max: 1,
+                    time: 10000,
+                    errors: ['time']
+                }).then(collected => {
+
+                    if (collected.first().content.toLowerCase() === 'no') {
+                        return message.reply("Unfortunately player can't be added due to no use of mic.");
+                    } else if (collected.first().content.toLowerCase() === 'yes') {
+
+                        let players = scrim.Players;
+                        let subs = scrim.Subs;
+                        let exit = false;
+
+                        // if user already applied => ignore
+                        players.forEach(p => {
+                            if (p.id === player.id) {
+                                message.reply(player.username + ' already applied for main!');
+                                exit = true;
+                            }
+                        });
+
+                        // if user already applied => ignore
+                        subs.forEach(s => {
+                            if (s.id === player.id) {
+                                message.reply(player.username + ' already applied for subs!');
+                                exit == true;
+                            }
+                        });
+
+                        // if number of player is maxed => ignore
+                        if (scrim.NumberOfSubs == subs.length) {
+                            message.reply('Scrim subs is full!');
+                            exit = true;
+                        }
+
+                        if (!exit) {
+                            subs.push(player);
+
+                            // update db
+                            db.collection('scrims').doc(q.id).update({
+                                'Subs': subs,
+                            }).then(() => {
+                                message.channel.send('<@' + player.id + '> you\'ve been put down as a sub');
+                            });
+                        }
+                    } else {
+                        return message.reply("only yes or no answers allowed.");
                     }
-                });
-
-                // if user already applied => ignore
-                subs.forEach(s => {
-                    if (s.id === player.id) {
-                        message.reply(player.username + ' already applied for subs!');
-                        exit == true;
-                    }
-                });
-
-                // if number of player is maxed => ignore
-                if (scrim.NumberOfSubs == subs.length) {
-                    message.reply('Scrim subs is full!');
-                    exit = true;
-                }
-
-                if (!exit) {
-                    subs.push(player);
-
-                    // update db
-                    db.collection('scrims').doc(q.id).update({
-                        'Subs': subs,
-                    }).then(() => {
-                        message.channel.send('<@' + player.id + '> you\'ve been put down as a sub');
-                    });
-                }
+                }).catch(err => { });
             });
         });
-
 }
 
 module.exports.help = {
