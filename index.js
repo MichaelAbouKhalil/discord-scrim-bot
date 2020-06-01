@@ -62,10 +62,10 @@ bot.on('message', message => {
     let accessChannels = ['697087280518529035', '709725120381452289', '710381919770247168'];
     if (!accessChannels.includes(message.channel.id)) return;
 
-    // if(message.channel.id === '697087280518529035'){
-    //     message.channel.send('Bot under maintenance');
-    //     return;
-    // }
+    if(message.channel.id === '697087280518529035'){
+        message.channel.send('Bot under maintenance');
+        return;
+    }
 
     db.collection('guilds').doc(message.guild.id).get().then((q) => {
         if (q.exists) {
