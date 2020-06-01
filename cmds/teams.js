@@ -22,16 +22,16 @@ module.exports.run = async (bot, message, args, db) => {
 
             let msg = 'The teams for today are as follows:\n\n';
             teamA.forEach(p => {
-                msg += '<@' + p.id + '>\n';
+                msg += p.username + '\n';
             });
             msg += '\nVs.\n\n';
             teamB.forEach(p => {
-                msg += '<@' + p.id + '>\n';
+                msg += p.username + '\n';
             });
             if (subs.length != 0) {
                 msg += '\n\nSubs:\n\n';
                 subs.forEach(s => {
-                    msg += '<@' + s.id + '>\n';
+                    msg += s.username + '\n';
                 });
             }
             message.channel.send(msg);
