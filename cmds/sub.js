@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, db) => {
+module.exports.run = async (bot, message, args, db, FieldValue, prefix, bannedPlayers) => {
 
     // id check
     if (typeof focusedID === 'undefined') {
@@ -20,9 +20,21 @@ module.exports.run = async (bot, message, args, db) => {
         username: username
     };
 
+    let banned = false;
+    bannedPlayers.forEach(b => {
+        if (b.id === player.id) {
+            message.reply("you are banned, please contact Scrim Mnagers!");
+            banned = true;
+        }
+    });
+
+    if (banned) {
+        return;
+    }
+
     let filter = m => m.author.id === message.author.id;
     message.reply("if you're put down for the scrim, will you use a mic? Reply with yes or no within 10 seconds or else you'll have to start all over.")
-    .then(r => r.delete({ timeout: 10000 }));
+        .then(r => r.delete({ timeout: 10000 }));
 
     message.channel.awaitMessages(filter, {
         max: 1,
@@ -90,7 +102,7 @@ module.exports.run = async (bot, message, args, db) => {
         } else {
             return message.reply("only yes or no answers allowed.");
         }
-    }).catch(err => {});
+    }).catch(err => { });
 }
 
 module.exports.help = {

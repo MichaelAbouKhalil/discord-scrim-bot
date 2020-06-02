@@ -9,6 +9,7 @@ const owner = process.env.OWNER;
 const token = process.env.TOKEN;
 let prefix;
 let focusedID = '1';
+let bannedPlayers = [];
 
 // initialize bot
 const bot = new Discord.Client({ disableEveryone: false });
@@ -70,6 +71,7 @@ bot.on('message', message => {
     db.collection('guilds').doc(message.guild.id).get().then((q) => {
         if (q.exists) {
             prefix = q.data().prefix;
+            bannedPlayers = q.data().bannedPlayers;
         }
     }).then(() => {
         let msg_array = message.content.split(" ");
@@ -81,7 +83,7 @@ bot.on('message', message => {
         if (bot.commands.get(command.slice(prefix.length))) {
             let cmd = bot.commands.get(command.slice(prefix.length));
             if (cmd) {
-                cmd.run(bot, message, args, db, FieldValue, prefix, moment);
+                cmd.run(bot, message, args, db, FieldValue, prefix, bannedPlayers);
             }
         }
     })
@@ -94,7 +96,8 @@ bot.on('guildCreate', async gData => {
         'guildOwner': gData.owner.user.username,
         'guildOwnerID': gData.ownerID,
         'guildMemberCount': gData.memberCount,
-        'prefix': '!'
+        'prefix': '!',
+        'bannedPlayers': []
     });
 });
 

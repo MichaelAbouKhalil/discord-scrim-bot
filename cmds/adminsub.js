@@ -1,4 +1,4 @@
-module.exports.run = async (bot, message, args, db) => {
+module.exports.run = async (bot, message, args, db, FieldValue, prefix, bannedPlayers) => {
 
     // role check
     const accessRoles = ['Scrim Manager'];
@@ -47,6 +47,18 @@ module.exports.run = async (bot, message, args, db) => {
                     id: userID,
                     username: username
                 };
+
+                let banned = false;
+                bannedPlayers.forEach(b => {
+                    if (b.id === player.id) {
+                        message.reply("this player is banned!");
+                        banned = true;
+                    }
+                });
+
+                if (banned) {
+                    return;
+                }
 
                 let filter = m => m.author.id === message.author.id;
                 message.reply("Before this player gets added, can you confirm he/she will use a mic? Answer with yes or no. **expires in 10 seconds**")
