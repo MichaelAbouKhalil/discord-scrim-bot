@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args, db, FieldValue, prefix, bannedPl
     let banned = false;
     bannedPlayers.forEach(b => {
         if (b.id === player.id) {
-            message.reply("you are banned, please contact Scrim Mnagers!");
+            message.reply("you are banned. Please contact scrim managers!");
             banned = true;
         }
     });
