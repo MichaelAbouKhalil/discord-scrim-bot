@@ -96,7 +96,7 @@ module.exports.run = async (bot, message, args, db, FieldValue, prefix, bannedPl
                         db.collection('scrims').doc(q.id).update({
                             'Players': players
                         }).then(() => {
-                            message.reply("👍 you've been put down for the scrim. " +
+                            message.channel.send("<@"+ player.id + "> 👍 you've been put down for the scrim. " +
                                 "Please note if you don't use your mic, you'll be banned from future scrims. Thanks");
                         });
                     }
