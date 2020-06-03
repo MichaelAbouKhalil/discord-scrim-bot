@@ -61,12 +61,12 @@ module.exports.run = async (bot, message, args, db, FieldValue, prefix, bannedPl
                 }
 
                 let filter = m => m.author.id === message.author.id;
-                message.reply("Before this player gets added, can you confirm he/she will use a mic? Answer with yes or no. **expires in 10 seconds**")
-                    .then(r => r.delete({ timeout: 10000 }));
+                message.reply("Before this player gets added, can you confirm he/she will use a mic? Answer with yes or no. **expires in 15 secondss**")
+                    .then(r => r.delete({ timeout: 15000 }));
 
                 message.channel.awaitMessages(filter, {
                     max: 1,
-                    time: 10000,
+                    time: 15000,
                     errors: ['time']
                 }).then(collected => {
 
