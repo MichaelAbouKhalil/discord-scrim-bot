@@ -1,4 +1,4 @@
-module.exports.run = (bot, message, args, db, prefix, moment) => {
+module.exports.run = (bot, message, args, db, FieldValue, prefix, bannedPlayers, moment) => {
 
     let title = '';
     for(let i =1 ;i < args.length; i++){
