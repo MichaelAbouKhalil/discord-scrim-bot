@@ -1,10 +1,11 @@
 module.exports.run = (bot, message, args, db, FieldValue, prefix, bannedPlayers, moment) => {
 
+    const accessRoles = ['Scrim Manager'];
     let title = '';
-    for(let i =1 ;i < args.length; i++){
+    for (let i = 1; i < args.length; i++) {
         title += args[i] + ' ';
     }
-    title += ':\n';
+    title += '\n';
     let date = moment.utc(args[0]);
     let now = moment.utc().set('second', 0);
     if (now.isSame(date) || now.isAfter(date)) {
@@ -17,36 +18,49 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix, bannedPlayers,
     message.channel.send(displayMessage(title, diff))
         .then(sent => {
             sent.pin();
-            let countdown = setInterval(() => {
-                if (sent.reactions.cache.keyArray().includes('❌')) {
-                    sent.edit(title + 'Countdown Stopped!');
-                    sent.unpin();
-                    clearInterval(countdown);
-                    return;
+            let stop = false;
+            let reactions = sent.reactions.cache;
+            reactions.forEach(r => {
+                if (r.emoji.name === '❌') {
+                    r.users.cache.forEach(u => {
+                        let memb = message.guild.members.fetch(u.id)
+                            .then(member => {
+                                member.roles.cache.forEach(role => {
+                                    if (accessRoles.includes(role.name)) {
+                                        stop = true;
+                                        sent.edit(title + 'Countdown Stopped!');
+                                        sent.unpin();
+                                        clearInterval(countdown);
+                                        return;
+                                    }
+                                })
+                            });
+                    });
                 }
-                now = moment.utc().set('second', 0);
-                if (now.isSame(date) || now.isAfter(date)) {
-                    sent.edit( title + 'Countdown Finished!');
-                    sent.unpin();
-                    clearInterval(countdown);
-                    return;
-                }
-                diff = moment.preciseDiff(date, now, true);
+            });
+            now = moment.utc().set('second', 0);
+            if (now.isSame(date) || now.isAfter(date)) {
+                sent.edit(title + 'Countdown Finished!');
+                sent.unpin();
+                clearInterval(countdown);
+                return;
+            }
+            diff = moment.preciseDiff(date, now, true);
 
-                sent.edit(displayMessage(title, diff));
-            }, 5 * 1000);
-        });
+            sent.edit(displayMessage(title, diff));
+        }, 5 * 1000);
+});
 }
 
-function displayMessage(title, diff){
+function displayMessage(title, diff) {
     let msg = title;
-    if(diff.years > 0) msg += diff.years + (diff.years > 1 ? ' years ' : ' year ');
-    if(diff.months > 0) msg += diff.months + (diff.months > 1 ? ' months ' : ' month ');
-    if(diff.days > 0) msg += diff.days + (diff.days > 1 ? ' days ' : 'day ');
-    if(diff.hours > 0) msg += diff.hours + (diff.hours > 1 ? ' hours ' : ' hour ');
-    if(diff.minutes > 0) msg += diff.minutes + (diff.minutes > 1 ? ' minutes ' : ' minute ');
-    if(msg === title){
-        if(diff.seconds > 0 ) msg += '< 1 minute ';
+    if (diff.years > 0) msg += diff.years + (diff.years > 1 ? ' years ' : ' year ');
+    if (diff.months > 0) msg += diff.months + (diff.months > 1 ? ' months ' : ' month ');
+    if (diff.days > 0) msg += diff.days + (diff.days > 1 ? ' days ' : 'day ');
+    if (diff.hours > 0) msg += diff.hours + (diff.hours > 1 ? ' hours ' : ' hour ');
+    if (diff.minutes > 0) msg += diff.minutes + (diff.minutes > 1 ? ' minutes ' : ' minute ');
+    if (msg === title) {
+        if (diff.seconds > 0) msg += '< 1 minute ';
     }
 
     return msg + 'remaining.';
