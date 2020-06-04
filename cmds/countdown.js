@@ -18,38 +18,39 @@ module.exports.run = (bot, message, args, db, FieldValue, prefix, bannedPlayers,
     message.channel.send(displayMessage(title, diff))
         .then(sent => {
             sent.pin();
-            let stop = false;
-            let reactions = sent.reactions.cache;
-            reactions.forEach(r => {
-                if (r.emoji.name === '❌') {
-                    r.users.cache.forEach(u => {
-                        let memb = message.guild.members.fetch(u.id)
-                            .then(member => {
-                                member.roles.cache.forEach(role => {
-                                    if (accessRoles.includes(role.name)) {
-                                        stop = true;
-                                        sent.edit(title + 'Countdown Stopped!');
-                                        sent.unpin();
-                                        clearInterval(countdown);
-                                        return;
-                                    }
-                                })
-                            });
-                    });
+            let countdown = setInterval(() => {
+                let stop = false;
+                let reactions = sent.reactions.cache;
+                reactions.forEach(r => {
+                    if (r.emoji.name === '❌') {
+                        r.users.cache.forEach(u => {
+                            let memb = message.guild.members.fetch(u.id)
+                                .then(member => {
+                                    member.roles.cache.forEach(role => {
+                                        if (accessRoles.includes(role.name)) {
+                                            stop = true;
+                                            sent.edit(title + 'Countdown Stopped!');
+                                            sent.unpin();
+                                            clearInterval(countdown);
+                                            return;
+                                        }
+                                    })
+                                });
+                        });
+                    }
+                });
+                now = moment.utc().set('second', 0);
+                if (now.isSame(date) || now.isAfter(date)) {
+                    sent.edit(title + 'Countdown Finished!');
+                    sent.unpin();
+                    clearInterval(countdown);
+                    return;
                 }
-            });
-            now = moment.utc().set('second', 0);
-            if (now.isSame(date) || now.isAfter(date)) {
-                sent.edit(title + 'Countdown Finished!');
-                sent.unpin();
-                clearInterval(countdown);
-                return;
-            }
-            diff = moment.preciseDiff(date, now, true);
+                diff = moment.preciseDiff(date, now, true);
 
-            sent.edit(displayMessage(title, diff));
-        }, 5 * 1000);
-});
+                sent.edit(displayMessage(title, diff));
+            }, 5 * 1000);
+        });
 }
 
 function displayMessage(title, diff) {
